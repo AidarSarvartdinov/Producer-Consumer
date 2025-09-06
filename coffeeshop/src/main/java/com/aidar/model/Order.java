@@ -7,8 +7,10 @@ public class Order {
 
     public Order(String drinkName) {
         this.drinkName = drinkName;
-        totalOrders++;
-        this.orderNumber= totalOrders;
+        synchronized (this) {
+            totalOrders++;
+            this.orderNumber= totalOrders;
+        }
     }
 
     @Override

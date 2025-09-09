@@ -4,30 +4,26 @@ import java.util.Random;
 
 import com.aidar.model.Order;
 import com.aidar.queue.OrderQueue;
-import com.aidar.service.OrderGenerator;
 import com.aidar.util.ConsoleLogger;
 
-public class Waiter implements Runnable {
-    private final OrderQueue queue;
-    private final OrderGenerator orderGenerator;
+public class Barista implements Runnable {
     private final Random random;
+    private final OrderQueue queue;
 
-    public Waiter(OrderQueue queue) {
+    public Barista(OrderQueue queue) {
         this.queue = queue;
-        this.orderGenerator = new OrderGenerator();
         this.random = new Random();
     }
 
     public void run() {
         while (true) {
-            Order order = orderGenerator.generateOrder();
-            queue.add(order);
-            ConsoleLogger.log("Added new order: " + order + "   | " + Thread.currentThread().getName());
+            Order order = queue.remove();
             try {
                 Thread.sleep(random.nextInt(4000) + 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            ConsoleLogger.log("Order " + order + " is finished");
         }
     }
 }
